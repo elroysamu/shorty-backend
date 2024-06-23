@@ -1,18 +1,16 @@
 package com.elrysamu.SmallURL.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 public class Url {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Lob
+
+    @Column(name = "original_url", length = 1000)
     private String originalUrl;
     private String shortLink;
     private LocalDateTime creationDate;
