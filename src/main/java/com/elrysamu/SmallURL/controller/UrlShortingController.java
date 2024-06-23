@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @RestController
-@CrossOrigin(origins = "https://elroysamu.github.io/shorty/")
 public class UrlShortingController {
 
     @Autowired
