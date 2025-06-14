@@ -33,7 +33,7 @@ public class UrlShortingController {
         UrlErrorResponseDto urlErrorResponseDto = new UrlErrorResponseDto();
         urlErrorResponseDto.setStatus("404");
         urlErrorResponseDto.setError("there was an error processing your request. Please try again.");
-        return new ResponseEntity<>(urlErrorResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(urlErrorResponseDto, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{shortLink}")
@@ -42,21 +42,21 @@ public class UrlShortingController {
             UrlErrorResponseDto urlErrorResponseDto = new UrlErrorResponseDto();
             urlErrorResponseDto.setError("url cannot be empty");
             urlErrorResponseDto.setStatus("400");
-            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.OK);
+            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.BAD_REQUEST);
         }
         Url urlToRet = urlService.getEncodedUrl(shortLink);
         if (urlToRet == null){
             UrlErrorResponseDto urlErrorResponseDto = new UrlErrorResponseDto();
             urlErrorResponseDto.setError("Url does not exist");
             urlErrorResponseDto.setStatus("400");
-            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.OK);
+            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.BAD_REQUEST);
         }
         if(urlToRet.getExpirationDate().isBefore(LocalDateTime.now())){
             urlService.deleteShortLink(urlToRet);
             UrlErrorResponseDto urlErrorResponseDto = new UrlErrorResponseDto();
             urlErrorResponseDto.setError("Url expired. Try generating a fresh one");
             urlErrorResponseDto.setStatus("400");
-            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.OK);
+            return new ResponseEntity<>(urlErrorResponseDto,HttpStatus.BAD_REQUEST);
         }
         response.sendRedirect(urlToRet.getOriginalUrl());
         return null;
